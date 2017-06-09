@@ -3,7 +3,8 @@
   margin: 0;
 }
 
-#myCancas {
+#myCanvas {
+  margin: 50% 0;
   background: #eee;
   display: block;
   margin: 0 auto;
