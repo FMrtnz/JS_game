@@ -19,11 +19,45 @@ var paddleY = canvas.height-paddleHeight;
 var rightPressed = false;
 var leftPressed = false;
 
+// Row count
+var brickRowCount = 3;
+var brickColumnCount = 5;
+var brickWidth = 75;
+var brickHeight = 20;
+var brickPadding = 10;
+var brickOffsetTop = 30;
+var brickOffsetLeft = 30;
+
+var bricks = [];
+for (c=0; c<brickColumnCount; c++) {
+  bricks[c] = [];
+  for (r=0; r<brickRowCount; r++) {
+      bricks[c][r] = {x: 0, y: 0}
+  }
+}
+
 // Code for moving paddle
 
 //  document.addEventListener("event type", fonction activated if there is the event);
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
+
+function drawBricks(){
+  for (c=0; c<brickColumnCount; c++) {
+    for (r=0; r<brickRowCount; r++) {
+        var brickX = (c*(brickWidth+brickPadding)+brickOffsetLeft);
+        var brickY = (r*(brickHeight+brickPadding)+brickOffsetTop);
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle ="#0095DD";
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+  }
+
 
 // (e) is parameter which represente the event
 function keyDownHandler(e) {
@@ -103,6 +137,9 @@ function draw() {
   // Moving parameters
   x += dx;
   y += dy;
+
+  // Bricks code
+  drawBricks();
 }
 
 // setInterval(function, milliseconds);
