@@ -78,8 +78,17 @@ function draw() {
     dx = -dx;
   }
 
-  if(y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
+  if(y + dy < ballRadius) {
     dy = -dy;
+  }
+  // Game over code alert
+  else if ( y + dy > canvas.height - ballRadius) {
+    if (x > paddleX && x < paddleX + paddleWidth) {
+      dy = -dy;
+    } else {
+      alert("Game Over");
+      document.location.reload();
+    }
   }
   // paddle code
   drawPaddle();
