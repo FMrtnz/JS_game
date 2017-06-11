@@ -4,9 +4,6 @@ var ctx = canvas.getContext('2d');
 
 //second tutorial (moving)
 
-// setInterval(function, milliseconds);
-
-setInterval(draw, 10);
 
 var x = canvas.width/2;
 var y = canvas.height - 30;
@@ -14,12 +11,56 @@ var dx = 2;
 var dy = -2;
 var ballRadius = 10;
 
+//Third tutorial moving paddle
+var paddleHeight = 10;
+var paddleWidth = 75;
+var paddleX = (canvas.width - paddleWidth) / 2;
+var paddleY = canvas.height-paddleHeight;
+var rightPressed = false;
+var leftPressed = false;
+
+// Code for moving paddle
+
+//  document.addEventListener("event type", fonction activated if there is the event);
+document.addEventListener("keydown", keyDownHandler);
+document.addEventListener("keyup", keyUpHandler);
+
+// (e) is parameter which represente the event
+function keyDownHandler(e) {
+  // keyCode correspond to a button of the laptop ex 39 => "right arrow"
+  if(e.keyCode == 39) {
+    rightPressed = true;
+  }
+  // 37 => "left arrow"
+  else if(e.keyCode == 37) {
+    leftPressed = true;
+  }
+}
+
+function keyUpHandler(e){
+  // keyCode correspond to a button of the laptop ex 39 => "right arrow"
+  if(e.keyCode == 39) {
+    rightPressed = false;
+  }
+  // 37 => "left arrow"
+  else if(e.keyCode == 37) {
+    leftPressed = false;
+  }
+}
 
 // Drawing code
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI*2, false);
   ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+
+function drawPaddle(){
+  ctx.beginPath();
+  ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+  ctx.fillStyle ="#0095DD";
   ctx.fill();
   ctx.closePath();
 }
@@ -40,11 +81,23 @@ function draw() {
   if(y + dy < ballRadius || y + dy > canvas.height - ballRadius) {
     dy = -dy;
   }
+  // paddle code
+  drawPaddle();
+
+  if(rightPressed && paddleX < canvas.width-paddleWidth) {
+    paddleX += 7;
+  }
+  else if(leftPressed && paddleX > 0) {
+    paddleX -= 7;
+  }
 
   // Moving parameters
   x += dx;
   y += dy;
 }
+
+// setInterval(function, milliseconds);
+setInterval(draw, 10);
 
 // first tutorial
 
