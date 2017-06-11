@@ -19,7 +19,7 @@ var paddleY = canvas.height-paddleHeight;
 var rightPressed = false;
 var leftPressed = false;
 
-// Row count
+// Bricks
 var brickRowCount = 3;
 var brickColumnCount = 5;
 var brickWidth = 75;
@@ -36,11 +36,22 @@ for (c=0; c<brickColumnCount; c++) {
   }
 }
 
+// Score
+var score = 0;
+
 // Code for moving paddle
 
 //  document.addEventListener("event type", fonction activated if there is the event);
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);
+document.addEventListener("mousemove", mouseMoveHandler);
+
+function mouseMoveHandler(e) {
+  var relativeX = e.clientX;
+  if(relativeX > 0 && relativeX < canvas.width){
+    paddleX = relativeX - paddleWidth/2
+  }
+}
 
 function drawBricks(){
   for (c=0; c<brickColumnCount; c++) {
@@ -68,12 +79,22 @@ function collisionDetection(){
           if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
             dy = -dy;
             b.status = 0;
+            score++;
+            if(score == brickRowCount*brickColumnCount) {
+              alert('You completed the game ! Congradultions !');
+              document.location.reload();
+            }
           }
         }
       }
     }
   }
 
+function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Score: "+score, 0, 20);
+}
 // (e) is parameter which represente the event
 function keyDownHandler(e) {
   // keyCode correspond to a button of the laptop ex 39 => "right arrow"
@@ -157,6 +178,8 @@ function draw() {
   drawBricks();
 
   collisionDetection();
+
+  drawScore();
 }
 
 // setInterval(function, milliseconds);
