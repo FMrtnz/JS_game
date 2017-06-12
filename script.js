@@ -38,6 +38,7 @@ for (c=0; c<brickColumnCount; c++) {
 
 // Score
 var score = 0;
+var lives = 3;
 
 // Code for moving paddle
 
@@ -48,7 +49,7 @@ document.addEventListener("mousemove", mouseMoveHandler);
 
 function mouseMoveHandler(e) {
   var relativeX = e.clientX;
-  if(relativeX > 0 && relativeX < canvas.width){
+  if(relativeX > 0 + paddleWidth/2 && relativeX < canvas.width -  paddleWidth/2){
     paddleX = relativeX - paddleWidth/2
   }
 }
@@ -94,6 +95,12 @@ function drawScore() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
   ctx.fillText("Score: "+score, 0, 20);
+}
+
+function drawLives() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Lives: "+ lives, canvas.width - 65, 20);
 }
 // (e) is parameter which represente the event
 function keyDownHandler(e) {
@@ -142,6 +149,14 @@ function draw() {
   // Drawing code
   drawBall();
 
+  // Bricks code
+  drawBricks();
+
+  collisionDetection();
+
+  drawScore();
+  drawLives();
+
   // Collision code
 
   if(x + dx < ballRadius || x + dx > canvas.width - ballRadius) {
@@ -156,8 +171,17 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      alert("Game Over");
-      document.location.reload();
+      lives--;
+      if(!lives) {
+        alert("Game Over");
+        document.location.reload();
+      } else {
+          x = canvas.width/2;
+          y = canvas.height - 30;
+          dx = 2;
+          dy = -2;
+          paddleX = (canvas.width - paddleWidth) / 2;
+      }
     }
   }
   // paddle code
@@ -174,12 +198,7 @@ function draw() {
   x += dx;
   y += dy;
 
-  // Bricks code
-  drawBricks();
 
-  collisionDetection();
-
-  drawScore();
 }
 
 // setInterval(function, milliseconds);
